@@ -2,14 +2,21 @@
     include_once 'DbConnector.php';
     include_once 'User.php';
     $user = new User("","","");
-    $con = new DBConnector();
+    $dbCon = new DBConnector();
+    $users = $user->readAll($dbCon->conn);
     if(isset($_POST['btnSave'])){
-        $fn = $_POST['first_name'];
-        $ln = $_POST['last_name'];
-        $city = $_POST['city_name'];
+        $fn = $_POST['firstName'];
+        $ln = $_POST['lastName'];
+        $city = $_POST['cityName'];
 
         $user = new User($fn,$ln,$city);
-        $result = $user->save($con);
+        if(!$user->validateForm())
+        {
+            $user->createFormErrorSessions();
+            header("Refresh:0");
+            die();
+        }
+        $result = $user->save($dbCon->conn);
         if($result)
         {
         echo "Save operation successful";
@@ -17,7 +24,7 @@
         else{
             echo "An error occured";
         }
-        $con->closeDatabase();
+        $dbCon->closeDatabase();
     }
 ?>
 <!DOCTYPE html>
@@ -27,6 +34,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>IAPLabOne</title>
+    <script type="text/javascript" src="validate.js"></script>
+    <link rel="stylesheet" type="text/css" href="validate.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
 
@@ -38,8 +47,8 @@
     </div>
     <div class="row">
         <div class="col d-flex justify-content-center" style="margin-top: 66px;">
-            <form method="post">
-                <div class="form-group">
+            <form method="post" name="user_details" onsubmit="return validateFrom()" action="<?=$_SERVER['PHP_SELF']?>">
+                <div class="form-group" >
                     <input class="form-control" name="firstName" type="text" placeholder="Firstname">
                 </div>
                 <div class="form-group">
@@ -67,7 +76,9 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <?php while($row = $user->readAll($conn)) {?>
+
+                        <?php while($row = $users) {?>
+
                         <tr>
                             <td><?php echo $row[0]; ?></td>
                             <td><?php echo $row[1]; ?></td>

@@ -33,7 +33,7 @@
      public function readAll($conn)
      {
          $query = mysqli_query($conn,"Select * from tUser");
-         return mysqli_fetch_array($query);
+         return mysqli_fetch_assoc($query);
      }
      public function readUnique($conn, $id)
      {
@@ -54,6 +54,20 @@
      public function removeAll($conn)
      {
          return null;
+     }
+     public function validateForm(){
+         $fn = $this->first_name;
+         $ln = $this->last_name;
+         $city = $this->city_name;
+         if($fn == "" || $ln == "" || $city = "")
+         {
+             return false;
+         }
+         return true;
+     }
+     public function createFromErrorsSessions(){
+         session_start();
+         $_SESSION['form_errors'] = "All fields are required";
      }
  }
 ?>

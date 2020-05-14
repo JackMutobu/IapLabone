@@ -9,7 +9,7 @@ class DBConnector{
 
     function __construct()
     {
-        $this->conn = mysqli_connect(DB_SERVER, DB_USER, DB_PASS,Db_NAME,'81') or die("Error:".mysqli_error($this->conn));
+        $this->conn = mysqli_connect(DB_SERVER, DB_USER, DB_PASS,Db_NAME) or die("Error:".mysqli_error($this->conn));
     }
 
     public function closeDatabase(){

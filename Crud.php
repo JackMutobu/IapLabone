@@ -7,5 +7,8 @@
     public function update($conn,$id);
     public function removeOne($conn,$id);
     public function removeAll($conn);
+
+    public function validateForm();
+    public function createFormErrorSessions();
 }
 ?>
