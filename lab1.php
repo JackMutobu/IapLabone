@@ -1,15 +1,17 @@
 <?php 
     include_once 'DbConnector.php';
     include_once 'User.php';
-    $user = new User("","","");
+    $user = new User("","","","","");
     $dbCon = new DBConnector();
     $users = $user->readAll($dbCon->conn);
     if(isset($_POST['btnSave'])){
         $fn = $_POST['firstName'];
         $ln = $_POST['lastName'];
         $city = $_POST['cityName'];
+        $uname = $_POST['userName'];
+        $pass = $_POST['password'];
 
-        $user = new User($fn,$ln,$city);
+        $user = new User($fn,$ln,$city,$uname,$pass);
         if(!$user->validateForm())
         {
             $user->createFormErrorSessions();
@@ -56,6 +58,12 @@
                 </div>
                 <div class="form-group">
                     <input class="form-control" name="cityName" type="text" placeholder="City">
+                </div>
+                <div class="form-group">
+                    <input class="form-control" name="userName" type="text" placeholder="Username">
+                </div>
+                <div class="form-group">
+                    <input class="form-control" name="password" type="password" placeholder="Password">
                 </div>
                 <div  class="form-group d-flex flex-column align-self-stretch">
                     <button class="btn btn-primary align-self-stretch" name="btnSave" type="submit">SAVE</button>
